@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Task Manager</h1>
+            <button class="theme-toggle"><i class="fas fa-moon"></i></button>
+        </header>
+
+        <div class="main-content">
+            <!-- Tasks Panel (Left) -->
+            <div class="tasks-panel">
+                <div class="tasks-panel-header">
+                    <h2>Tasks</h2>
+                    <div class="task-filters">
+                        <input type="text" id="search" placeholder="Search tasks...">
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="active">Active</button>
+                            <button class="filter-btn" data-filter="completed">Completed</button>
+                        </div>
+                        <select id="sort-select">
+                            <option value="createdAt-desc">Newest First</option>
+                            <option value="createdAt-asc">Oldest First</option>
+                            <option value="dueDate-asc">Due Date (Ascending)</option>
+                            <option value="dueDate-desc">Due Date (Descending)</option>
+                            <option value="priority-desc">Priority (High to Low)</option>
+                            <option value="priority-asc">Priority (Low to High)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="tasks-panel-content">
+                    <div class="import-export-buttons">
+                        <input type="file" id="import-file" accept=".xlsx">
+                        <button id="import-btn"><i class="fas fa-file-import"></i> Import Tasks</button>
+                        <button id="export-btn"><i class="fas fa-file-export"></i> Export Tasks</button>
+                    </div>
+                    <ul id="tasks-list" class="task-list"></ul>
+                </div>
+            </div>
+
+            <!-- Main Area (Middle) -->
+            <div class="main-area">
+                <!-- Calendar Section -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Calendar & Overview</h2>
+                        <button class="collapse-btn" data-target="calendar-content">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                    <div id="calendar-content" class="section-content">
+                        <div class="calendar-header">
+                            <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                            <h3 id="current-month"></h3>
+                            <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                        <div id="calendar" class="calendar"></div>
+                    </div>
+                </div>
+
+                <!-- Task Input Section -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Add New Task</h2>
+                        <button class="collapse-btn" data-target="task-input-content">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                    <div id="task-input-content" class="section-content">
+                        <div class="task-input">
+                            <div class="input-group">
+                                <input type="text" id="new-task" placeholder="Add a new task...">
+                                <button id="add-task"><i class="fas fa-plus"></i> Add Task</button>
+                            </div>
+                            <div class="task-details">
+                                <input type="date" id="due-date">
+                                <input type="url" id="task-url" placeholder="Add URL">
+                                <select id="client">
+                                    <option value="">Select Client</option>
+                                </select>
+                                <select id="priority">
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                                <textarea id="task-notes" placeholder="Add notes"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar (Right) -->
+            <div class="sidebar">
+                <!-- Clients Section -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Clients</h2>
+                        <div class="section-actions">
+                            <button id="add-client"><i class="fas fa-plus"></i> Add Client</button>
+                            <button class="collapse-btn" data-target="clients-content">
+                                <i class="fas fa-chevron-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="clients-content" class="section-content">
+                        <div id="clients-list" class="clients-list"></div>
+                    </div>
+                </div>
+
+                <!-- Statistics Section -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Statistics</h2>
+                        <button class="collapse-btn" data-target="statistics-content">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                    <div id="statistics-content" class="section-content">
+                        <div class="stat-grid">
+                            <div id="active-tasks-count" class="stat-item clickable">
+                                <div class="stat-value">0</div>
+                                <div class="stat-label">Active Tasks</div>
+                            </div>
+                            <div id="completed-today" class="stat-item clickable">
+                                <div class="stat-value">0</div>
+                                <div class="stat-label">Completed Today</div>
+                            </div>
+                            <div id="due-today" class="stat-item clickable">
+                                <div class="stat-value">0</div>
+                                <div class="stat-label">Due Today</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="completion-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 

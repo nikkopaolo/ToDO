@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart To-Do</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Smart To-Do</h1>
+            <div class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </div>
+        </header>
+
+        <div class="search-container">
+            <input type="text" id="search" placeholder="Search tasks...">
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="active">Active</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+            </div>
+        </div>
+
+        <div class="task-input">
+            <input type="text" id="new-task" placeholder="Add a new task...">
+            <input type="datetime-local" id="due-date">
+            <input type="url" id="task-url" placeholder="Add a URL (optional)">
+            <button id="add-task"><i class="fas fa-plus"></i></button>
+        </div>
+
+        <div class="tasks-container">
+            <ul id="tasks-list">
+                <!-- Tasks will be added here dynamically -->
+            </ul>
+        </div>
+
+        <div class="stats">
+            <span id="tasks-count">0 tasks remaining</span>
+            <button id="clear-completed">Clear Completed</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html> 
